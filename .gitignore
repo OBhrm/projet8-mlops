@@ -5,3 +5,4 @@ env/
 mlruns/
 .pytest_cache/
 .ipynb_checkpoints/
+data/app_train_final.parquet
