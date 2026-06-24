@@ -1,0 +1,24 @@
+artifact_path: file:c:/Users/obenb/Formation data scientist machine learning eng/Projet
+  6 - Initiez vous au MLOPS/mlruns/450482343515343372/models/m-412306c705ba48b0aca48fee6935e395/artifacts
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.6.0
+    model_class: lightgbm.sklearn.LGBMClassifier
+    serialization_format: cloudpickle
+    skops_trusted_types: null
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.13.5
+mlflow_version: 3.12.0
+model_id: m-412306c705ba48b0aca48fee6935e395
+model_size_bytes: 1727076
+model_uuid: m-412306c705ba48b0aca48fee6935e395
+prompts: null
+run_id: 900b68fcd4004a5f93a779693268005e
+utc_time_created: '2026-06-16 10:19:56.229570'
