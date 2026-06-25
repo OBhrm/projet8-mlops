@@ -7,7 +7,11 @@ from app.schemas import PredictionInput
 from app.features import FEATURES
 from app.database import SessionLocal
 from app.models import Prediction
+from app.database import engine
+from app.models import Base
 
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
