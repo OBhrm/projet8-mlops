@@ -9,3 +9,8 @@ lightgbm
 pytest
 httpx
 pyarrow
+sqlalchemy
+psycopg2-binary
+python-dotenv
+evidently
+streamlit

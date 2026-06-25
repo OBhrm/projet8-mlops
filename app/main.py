@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 import pandas as pd
+import time
 
 from app.model_loader import model
 from app.schemas import PredictionInput
 from app.features import FEATURES
+from app.database import SessionLocal
+from app.models import Prediction
 
 
 app = FastAPI()
@@ -17,23 +20,74 @@ def home():
 @app.post("/predict")
 def predict(data: PredictionInput):
 
+    start_time = time.time()
+
     # Vérification des colonnes manquantes
     missing_features = [f for f in FEATURES if f not in data.features]
 
-    # Construction du DataFrame
+    # Construction des features d'entrée
     input_features = data.features.copy()
 
-    # Compléter les colonnes manquantes avec 0
+    # Ajout des colonnes manquantes avec 0
     for feature in FEATURES:
         if feature not in input_features:
             input_features[feature] = 0
 
+    # Construction du DataFrame dans le bon ordre
     X = pd.DataFrame([input_features])
     X = X[FEATURES]
 
-    # Prédiction
-    score = model.predict(X)[0]
+    db = SessionLocal()
 
-    return {
-        "score": float(score)
-    }
+    try:
+
+        # Prédiction
+        score = model.predict(X)[0]
+
+        # Temps d'exécution
+        latency_ms = (time.time() - start_time) * 1000
+
+        # Sauvegarde dans PostgreSQL (Neon)
+        prediction = Prediction(
+            score=float(score),
+
+            AMT_INCOME_TOTAL=float(input_features.get("AMT_INCOME_TOTAL", 0)),
+            AMT_CREDIT=float(input_features.get("AMT_CREDIT", 0)),
+            DAYS_BIRTH=float(input_features.get("DAYS_BIRTH", 0)),
+
+            latency_ms=latency_ms,
+            status="success",
+            error_message=None
+        )
+
+        db.add(prediction)
+        db.commit()
+
+        return {
+            "score": float(score)
+        }
+
+    except Exception as e:
+
+        latency_ms = (time.time() - start_time) * 1000
+
+        # Enregistrement de l'erreur dans Neon
+        prediction = Prediction(
+            score=None,
+
+            AMT_INCOME_TOTAL=float(input_features.get("AMT_INCOME_TOTAL", 0)),
+            AMT_CREDIT=float(input_features.get("AMT_CREDIT", 0)),
+            DAYS_BIRTH=float(input_features.get("DAYS_BIRTH", 0)),
+
+            latency_ms=latency_ms,
+            status="error",
+            error_message=str(e)
+        )
+
+        db.add(prediction)
+        db.commit()
+
+        raise e
+
+    finally:
+        db.close()
