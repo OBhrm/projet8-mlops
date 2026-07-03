@@ -3,7 +3,7 @@
 
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Float, DateTime, String, Text
+from sqlalchemy import Column, Integer, Float, DateTime, String, Text, JSON
 from sqlalchemy.orm import DeclarativeBase
 
 
@@ -26,3 +26,4 @@ class Prediction(Base):
     latency_ms = Column(Float)
     status = Column(String(20))
     error_message = Column(Text)
+    input_features = Column(JSON)

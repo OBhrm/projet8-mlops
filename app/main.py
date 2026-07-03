@@ -61,7 +61,9 @@ def predict(data: PredictionInput):
 
             latency_ms=latency_ms,
             status="success",
-            error_message=None
+            error_message=None,
+
+            input_features=input_features
         )
 
         db.add(prediction)
@@ -85,7 +87,9 @@ def predict(data: PredictionInput):
 
             latency_ms=latency_ms,
             status="error",
-            error_message=str(e)
+            error_message=str(e),
+
+            input_features=data.features
         )
 
         db.add(prediction)
