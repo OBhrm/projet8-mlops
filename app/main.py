@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import pandas as pd
 import time
+import numpy as np
 
 from app.model_loader import model
 from app.schemas import PredictionInput
@@ -32,10 +33,10 @@ def predict(data: PredictionInput):
     # Construction des features d'entrée
     input_features = data.features.copy()
 
-    # Ajout des colonnes manquantes avec 0
+    # Ajout des colonnes manquantes avec NAN
     for feature in FEATURES:
         if feature not in input_features:
-            input_features[feature] = 0
+            input_features[feature] = np.nan
 
     # Construction du DataFrame dans le bon ordre
     X = pd.DataFrame([input_features])
@@ -63,7 +64,7 @@ def predict(data: PredictionInput):
             status="success",
             error_message=None,
 
-            input_features=input_features
+            input_features=data.features
         )
 
         db.add(prediction)
