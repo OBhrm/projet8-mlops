@@ -24,6 +24,8 @@ class Prediction(Base):
     AMT_CREDIT = Column(Float)
     DAYS_BIRTH = Column(Float)
     latency_ms = Column(Float)
+    cpu_percent = Column(Float, nullable=True)
+    memory_mb = Column(Float, nullable=True)
     status = Column(String(20))
     error_message = Column(Text)
     input_features = Column(JSON)
