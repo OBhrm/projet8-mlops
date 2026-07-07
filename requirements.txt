@@ -14,5 +14,4 @@ psycopg2-binary
 python-dotenv
 evidently
 streamlit
-os 
-psytil
+psutil
