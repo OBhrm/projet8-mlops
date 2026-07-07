@@ -9,3 +9,4 @@ data/app_train_final.parquet
 .env
 Projet 8 - API/
 Projet 8 - Dashboard/
+data/*.parquet
