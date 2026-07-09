@@ -10,3 +10,5 @@ data/app_train_final.parquet
 Projet 8 - API/
 Projet 8 - Dashboard/
 data/*.parquet
+*.db
+test.db

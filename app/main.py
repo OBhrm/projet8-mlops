@@ -12,7 +12,8 @@ from app.database import SessionLocal
 from app.models import Prediction
 from app.database import engine
 from app.models import Base
-
+from fastapi import Depends
+from app.security import verify_api_key
 
 Base.metadata.create_all(bind=engine)
 
@@ -25,7 +26,7 @@ def home():
 
 
 @app.post("/predict")
-def predict(data: PredictionInput):
+def predict(data: PredictionInput, x_api_key: str = Depends(verify_api_key)):
 
     start_time = time.perf_counter()
 
